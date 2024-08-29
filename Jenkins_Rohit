@@ -4,33 +4,28 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                 echo 'Use Maven to build the code'
+                echo 'Use Maven to build the code'
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Run unit and integration tests using Selenium and junit'
+                echo 'Run unit and integration tests using Selenium and JUnit'
             }
 
             post {
-                success {
-                    echo 'Selenium and junit test successfully completed'
-                    emailext(
-                        to: 'rohitrapter@gmail.com',
-                        subject:"Status of Unit and Integration Test:  ${currentBuild.result}",
-                        body:'Check the log files to obtain additional information about the process',
-                        attachLog: true
-                    )
-                }
-                failure {
-                    echo 'The Unit and Integration Testing failed'
-                    emailext(
-                        to: 'rohitrapter@gmail.com',
-                        subject:"Status of Unit and Integration Test:  ${currentBuild.result}",
-                        body:'Check the log files to obtain additional information about the process',
-                        attachLog: true
-                    )
+                always {
+                    script {
+                        def result = currentBuild.result ?: 'SUCCESS'
+                        def message = result == 'SUCCESS' ? 'Selenium and JUnit tests successfully completed' : 'The Unit and Integration Testing failed'
+                        echo message
+                        emailext(
+                            to: 'rohitrapter@gmail.com',
+                            subject: "Status of Unit and Integration Test: ${result}",
+                            body: 'Check the log files to obtain additional information about the process',
+                            attachLog: true
+                        )
+                    }
                 }
             }
         }
@@ -47,24 +42,18 @@ pipeline {
             }
 
             post {
-                success {
-                    echo 'OWASP ZAP Security Scanning successfully completed'
-                    emailext(
-                        to: 'rohitrapter@gmail.com',
-                        subject:"Status of Security Scanning:  ${currentBuild.result}",
-                        body:'Check the log files to obtain additional information about the process',
-                        attachLog: true
-                    )
-                }
-
-                failure {
-                    echo 'OWASP ZAP Security Scanning failed'
-                    emailext(
-                        to: 'rohitrapter@gmail.com',
-                        subject:"Status of Security Scanning:  ${currentBuild.result}",
-                        body:'Check the log files to obtain additional information about the process',
-                        attachLog: true
-                    )
+                always {
+                    script {
+                        def result = currentBuild.result ?: 'SUCCESS'
+                        def message = result == 'SUCCESS' ? 'OWASP ZAP Security Scanning successfully completed' : 'OWASP ZAP Security Scanning failed'
+                        echo message
+                        emailext(
+                            to: 'rohitrapter@gmail.com',
+                            subject: "Status of Security Scanning: ${result}",
+                            body: 'Check the log files to obtain additional information about the process',
+                            attachLog: true
+                        )
+                    }
                 }
             }
         }
