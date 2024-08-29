@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
@@ -17,8 +16,8 @@ pipeline {
                 success {
                     echo 'Selenium and junit test successfully completed'
                     emailext(
-                        to: 'rajvikram1998@gmail.com',
-                        subject:"The status of the Unit and Integration Test:  ${currentBuild.result}",
+                        to: 'rohitrapter@gmail.com',
+                        subject:"Status of Unit and Integration Test:  ${currentBuild.result}",
                         body:'Check the log files to obtain additional information about the process',
                         attachLog: true
                     )
@@ -26,8 +25,8 @@ pipeline {
                 failure {
                     echo 'The Unit and Integration Testing failed'
                     emailext(
-                        to: 'rajvikram1998@gmail.com',
-                        subject:"The status of the Unit and Integration Test:  ${currentBuild.result}",
+                        to: 'rohitrapter@gmail.com',
+                        subject:"Status of Unit and Integration Test:  ${currentBuild.result}",
                         body:'Check the log files to obtain additional information about the process',
                         attachLog: true
                     )
@@ -50,8 +49,8 @@ pipeline {
                 success {
                     echo 'OWASP ZAP Security Scanning successfully completed'
                     emailext(
-                        to: 'rajvikram1998@gmail.com',
-                        subject:"The status of the Security Scanning:  ${currentBuild.result}",
+                        to: 'rohitrapter@gmail.com',
+                        subject:"Status of Security Scanning:  ${currentBuild.result}",
                         body:'Check the log files to obtain additional information about the process',
                         attachLog: true
                     )
@@ -60,8 +59,8 @@ pipeline {
                 failure {
                     echo 'OWASP ZAP Security Scanning failed'
                     emailext(
-                        to: 'rajvikram1998@gmail.com',
-                        subject:"The status of the Security Scanning:  ${currentBuild.result}",
+                        to: 'rohitrapter@gmail.com',
+                        subject:"Status of Security Scanning:  ${currentBuild.result}",
                         body:'Check the log files to obtain additional information about the process',
                         attachLog: true
                     )
